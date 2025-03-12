@@ -8,3 +8,5 @@ Model Training: I trained a machine learning model to predict neurodevelopmental
 Model Saving: I serialized the trained model into a .pkl file using joblib.
 Flask API: A basic Flask app that loads the model and serves predictions via a simple API.
 Deployment: The Flask app runs locally and can be accessed via http://127.0.0.1:5000.
+
+Feel free to let me know of any improvements!
