@@ -1,33 +1,28 @@
+import streamlit as st
 import joblib
-from flask import Flask, request, jsonify
+import numpy as np
 
-app = Flask(__name__)
-
-# Load the model (update the path if needed)
+# Load the pre-trained model
 model = joblib.load('model.pkl')
 
-@app.route('/')
-def home():
-    return "Welcome to the model API!"
+# Define the prediction function
+def predict(data):
+    return model.predict([data])
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    # Get the data from the POST request (assumed to be in JSON format)
-    data = request.get_json()
+# Set up the Streamlit interface
+st.title("Neurodevelopmental Disorder Prediction Tool")
 
-    # Extract the features (this depends on how your model works)
-    # Make sure to replace 'feature1', 'feature2', etc. with your actual feature names
-    feature1 = data['feature1']
-    feature2 = data['feature2']
+# User inputs for the model (adjust based on your model's features)
+age = st.number_input("Age", min_value=0, max_value=100, step=1)
+gender = st.selectbox("Gender", ["Male", "Female"])
+
+# Button to trigger the prediction
+if st.button("Get Prediction"):
+    # Collect user input into a list (expand based on your model's input features)
+    data = [age, 1 if gender == "Male" else 0]  # Example: converting gender to numerical (Male=1, Female=0)
     
-    # Prepare the features as a list or array for the model
-    features = [[feature1, feature2]]  # Example for two features, adjust accordingly
-
-    # Predict using the loaded model
-    prediction = model.predict(features)
-
-    # Return the prediction as a JSON response
-    return jsonify({'prediction': prediction.tolist()})
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    # Run prediction
+    prediction = predict(data)
+    
+    # Display prediction result
+    st.write(f"Prediction: {prediction[0]}")
